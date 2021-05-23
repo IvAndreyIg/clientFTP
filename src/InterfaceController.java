@@ -14,10 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class InterfaceController {
     //fxml
@@ -233,9 +232,21 @@ public class InterfaceController {
 
 
     public void logInLoger(String data){
+
+
+
+
+        logArea.appendText("\n"+Tools.getDateTime());
         logArea.appendText(data);
 
+
+
     }
+
+
+
+
+
 
 
 
@@ -290,8 +301,6 @@ public class InterfaceController {
 
 
 
-//    public void choiceBoxClick(ContextMenuEvent contextMenuEvent) {
-//    }
 
     public void connectButClick(ActionEvent actionEvent) {
 
@@ -310,6 +319,7 @@ public class InterfaceController {
 
     }
 
+    //выбираем путь к файлу для метода SEND
     public void choiceFile(ActionEvent actionEvent) {
 
         fileChooser.setTitle("Select file for send");
@@ -322,6 +332,7 @@ public class InterfaceController {
 
 
     }
+    //Выбираем путь к директориии сохранения файлов для методов GET,LIST
     public void choiceDirectory(ActionEvent actionEvent) {
         directoryChooser.setTitle("Select directory for save");
         directoryChooser.setInitialDirectory(new File("/"));
@@ -334,5 +345,13 @@ public class InterfaceController {
         //utton button = new Button("Select Directory");
 
 
+    }
+
+
+    //очищаем логгер
+    public void clearLoggerButClick(ActionEvent actionEvent) {
+
+
+        logArea.clear();
     }
 }

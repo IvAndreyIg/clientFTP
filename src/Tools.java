@@ -1,11 +1,19 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Tools {
 
 
 
+   static final DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 
     static String[]  firstSplitEnter(String command){
         String[] arg = command.split("\n");
+        return arg;
+    }
+    static String[]  splitArray(String command){
+        String[] arg = command.split(" ");
         return arg;
     }
     static int splitLenth(String command){
@@ -30,4 +38,11 @@ public class Tools {
         else
             return "";
     }
+
+    static String getDateTime(){
+
+
+        return LocalDateTime.now().format(myFormatObj);
+    }
+
 }
