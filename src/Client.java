@@ -1,132 +1,240 @@
+import javafx.scene.control.TextArea;
+
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Scanner;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Client implements Runnable {
 
     static int port = 5217;
     static int transferPort = 5218;
+    private final InterfaceController interfaceController;
 
     Socket mainSocket;
+
 
     Socket transferSocket;
 
     static String  serverIP="127.0.0.1";
 
 
+    boolean requestInProcessing=true;
+
+
     String secondArgument="";
 
-    DataInputStream din;
-    DataOutputStream dout;
+    ObjectOutputStream dout;
+    ObjectInputStream din;
+    private volatile boolean inConnection;
+
 
     String filesDir="clientFiles/";
 
 
-
-    public Client(Socket socket) {
-        this.mainSocket = socket;
+    public boolean closeConnection(){
 
         try {
-            din=new DataInputStream(socket.getInputStream());
-            dout=new DataOutputStream(socket.getOutputStream());
+            this.mainSocket.close();
+            inConnection=false;
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return true;
+        }
+    }
+
+
+
+
+    public Client(Socket socket, InterfaceController interfaceController) {
+        this.mainSocket = socket;
+        this.interfaceController = interfaceController;
+
+
+        try {
+
+
+            dout = new ObjectOutputStream(socket.getOutputStream());
+
+            din = new ObjectInputStream(socket.getInputStream());
+
+            inConnection=true;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
     }
+
+
 
     public static void main(String[] args)  {
-        Socket socket = new Socket();
-        try {
-
-            //подключаемся к серверу
-            socket.connect(new InetSocketAddress(serverIP,port),2000);
-
-            Client client = new Client(socket);
-
-
-
-            new Thread(client).start();
-
-
-            Scanner in = new Scanner(System.in);
-
-            //считываем команды из терминала
-            while(true){
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.print("Input command: ");
-                String command = in.nextLine();
-
-                try {
-                    if(firstSplit(command).equals("LIST"))
-                        client.secondArgument="list.txt";
-                    else{
-                        //получаем имя файла
-                        client.secondArgument=secondSplit(command);
-                    }
-
-
-                }catch (Exception e){
-
-                }
-
-
-
-                System.out.println("command:"+command);
-
-                client.dout.writeBytes(command+"\n");
-            }
-
-
-
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        Socket socket = new Socket();
+//        try {
+//
+//            //подключаемся к серверу
+//            socket.connect(new InetSocketAddress(serverIP,port),2000);
+//
+//            Client client = new Client(socket, new TextArea());
+//
+//
+//
+//            new Thread(client).start();
+//
+//
+//            Scanner in = new Scanner(System.in);
+//
+//            //считываем команды из терминала
+//            while(client.inConnection){
+//
+//                try {
+//                    Thread.sleep(200);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                System.out.print("Input command: ");
+//                String data = in.nextLine();
+//
+//                String command=Tools.firstSplit(data);
+//
+//                String filePath=Tools.secondSplit(data);
+//
+//
+//                //отправляем команду
+//                client.sendCommandObject(command,filePath,"");
+//            }
+//
+//
+//
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
     }
-    static String  firstSplit(String command){
-        String[] arg = command.split(" ");
-        return arg[0];
-    }
-    static String  secondSplit(String command){
-        String[] arg = command.split(" ");
-        return arg[1];
-    }
+
 
     @Override
     public void run() {
 
-        while(true){
+        while(inConnection){
 
             try {
+                HashMap<String, Object> receivedMessage;
+                String code="";
+                String path="";
+                String text="";
+                try {
 
-                //считываем полученную команду
-                String Command=din.readLine();
+
+                    //считываем полученную команду
+                     receivedMessage=(HashMap<String, Object>)din.readObject();
+                     code=receivedMessage.get("code").toString();
+                     path=receivedMessage.get("path").toString();
+                     text=receivedMessage.get("text").toString();
+
+
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
                 //выводим полученную команду
-                System.out.println("Command:"+Command);
+               // System.out.println("\ncode:"+code+" path:"+path+" text:"+text);
 
-                //получаем файл
-                if(Command.contains("150"))
+
+                interfaceController.logInLoger("\n---------------\n\tcode:"+code+"\n\ttext:\n"+text+"\n---------------");
+
+                //получаем лист
+                if(code.contains("149"))
                 {
 
                     transferSocket=new Socket();
                     transferSocket.connect(new InetSocketAddress(transferPort),2000);
                     DataInputStream in = new DataInputStream(transferSocket.getInputStream());
-                    DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
+                    // DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
 
-                    File f = new File(filesDir+secondArgument);
-                    System.out.println("arg:"+secondArgument);
+
+                   // File f = new File(path);
+                    //    System.out.println("arg:"+path);
                     secondArgument="";
+
+
+                    byte[] buffer = new byte[1024];
+                    int count;
+
+                   // logArea.setText(logArea.getText()+"\n---------------\n\tfiles:\n");
+
+
+                    List<FileName> filesList = new ArrayList<FileName>();
+
+                    int i=0;
+
+                    StringBuilder stringBuilder = new StringBuilder("");
+
+                    while((count = in.read(buffer)) >= 0){
+
+                        byte[] buffer1 = buffer;
+
+                        //filesList.add(new FileName(String.valueOf(Tools.splitLenth(new String(buffer1,0,count, StandardCharsets.UTF_8)))));
+
+                        stringBuilder.append(new String(buffer1,0,count, StandardCharsets.UTF_8));
+
+                        //System.out.println(++i+"count"+count);
+
+                       // fout.write(buffer,0,count);
+                    }
+
+
+                 //   System.out.println(stringBuilder.toString());
+
+
+                    String[] strings = Tools.firstSplitEnter(stringBuilder.toString());
+
+
+                   // System.out.println("strings.length"+strings.length);
+
+                    for (int j=0;j<strings.length;j++){
+
+
+
+
+                        filesList.add(new FileName(Tools.fifthSplit(strings[j])));
+                    }
+
+                   // Tools.firstSplitEnter(stringBuilder.toString());
+
+                    interfaceController.setFilesList(filesList);
+
+
+                    transferSocket.close();
+
+                }
+                //получаем файл
+                if(code.contains("150"))
+                {
+
+                    transferSocket=new Socket();
+                    transferSocket.connect(new InetSocketAddress(transferPort),2000);
+                    DataInputStream in = new DataInputStream(transferSocket.getInputStream());
+                   // DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
+
+                    if(true){
+
+                    }
+
+                    System.out.println("150:"+150);
+                    System.out.println("path"+path);
+                    File f = new File(path);
+                //    System.out.println("arg:"+path);
+
                     FileOutputStream fout=new FileOutputStream(f);
 
                     byte[] buffer = new byte[1024];
@@ -140,15 +248,15 @@ public class Client implements Runnable {
 
                 }
                 //отправляем файл
-                if(Command.contains("151")){
+                if(code.contains("151")){
                     transferSocket=new Socket();
 
                     transferSocket.connect(new InetSocketAddress(transferPort),2000);
-                    DataInputStream in = new DataInputStream(transferSocket.getInputStream());
+                   // DataInputStream in = new DataInputStream(transferSocket.getInputStream());
                     DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
 
-                    File f = new File(filesDir+secondArgument);
-                    secondArgument="";
+                    File f = new File(path);
+
 
                     FileInputStream fin=new FileInputStream(f);
 
@@ -172,6 +280,68 @@ public class Client implements Runnable {
             }
 
 
+
         }
     }
+
+
+
+
+    public void sendCommandObject(String command,String filePath,String text) throws IOException {
+
+
+        //получаем команду
+       // String command=command;
+
+       // String filePath=firstSplit(commandData);
+
+
+        Path testFilePath= Paths.get(filePath);
+      //  Path testFilePath= Paths.get("C:\\Users\\Username\\Desktop\\testFile.txt");
+
+        Path fileName = testFilePath.getFileName();
+
+
+        //Paths.get("C:\\Users\\Username\\Desktop\\testFile.txt");
+
+
+            // если используем команду list, то и сохраняем в list
+            if(command.equals("LIST")){
+                fileName=Paths.get("list.txt");
+                testFilePath=fileName;
+                filePath+="\\"+"list.txt";
+            }
+
+
+
+
+      //  System.out.println(fileName);
+
+
+
+      //  System.out.println("senfp:"+filePath);
+
+
+
+        //Создаем тело сообщения
+        HashMap<String, Object> newMessage = new HashMap<>();
+        //Устанавливаем команду
+        newMessage.put("command",command);
+        //Устанавливаем специальный текст
+        newMessage.put("text",text);
+        //Устанавливаем путь
+        newMessage.put("path",filePath);
+        //Устанавливаем название
+        newMessage.put("name",(fileName.toString()));
+        //Отправляем сообщение серверу
+        try { dout.writeObject(newMessage);
+        } catch (IOException e) { e.printStackTrace();
+        }
+
+
+
+
+    }
+
+
 }
