@@ -11,7 +11,7 @@ import java.util.*;
 public class Client implements Runnable {
 
     static int port = 5217;
-    static int transferPort = 5218;
+   // static int transferPort = 5218;
     private final InterfaceController interfaceController;
 
     Socket mainSocket;
@@ -19,7 +19,7 @@ public class Client implements Runnable {
 
     Socket transferSocket;
 
-    static String  serverIP="127.0.0.1";
+
 
 
     boolean requestInProcessing=true;
@@ -143,6 +143,7 @@ public class Client implements Runnable {
 
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
+                    disconnect();
                 }
 
 
@@ -157,7 +158,7 @@ public class Client implements Runnable {
                 {
 
                     transferSocket=new Socket();
-                    transferSocket.connect(new InetSocketAddress(transferPort),2000);
+                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferPort()),2000);
                     DataInputStream in = new DataInputStream(transferSocket.getInputStream());
                     // DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
 
@@ -193,13 +194,12 @@ public class Client implements Runnable {
                     }
 
 
-                 //   System.out.println(stringBuilder.toString());
 
 
                     String[] strings = Tools.firstSplitEnter(stringBuilder.toString());
 
 
-                   // System.out.println("strings.length"+strings.length);
+
 
                     for (int j=0;j<strings.length;j++){
 
@@ -209,7 +209,7 @@ public class Client implements Runnable {
                         filesList.add(new FileName(Tools.fifthSplit(strings[j])));
                     }
 
-                   // Tools.firstSplitEnter(stringBuilder.toString());
+
 
                     interfaceController.setFilesList(filesList);
 
@@ -222,7 +222,7 @@ public class Client implements Runnable {
                 {
 
                     transferSocket=new Socket();
-                    transferSocket.connect(new InetSocketAddress(transferPort),2000);
+                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferPort()),2000);
                     DataInputStream in = new DataInputStream(transferSocket.getInputStream());
                    // DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
 
@@ -251,7 +251,7 @@ public class Client implements Runnable {
                 if(code.contains("151")){
                     transferSocket=new Socket();
 
-                    transferSocket.connect(new InetSocketAddress(transferPort),2000);
+                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferPort()),2000);
                    // DataInputStream in = new DataInputStream(transferSocket.getInputStream());
                     DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
 
@@ -274,15 +274,40 @@ public class Client implements Runnable {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                System.exit(1);
-                break;
+
+                //interfaceController.logInLoger();
+
+                interfaceController.logInLoger("\n-----\n"+"transfer error:\n\tconnect timed out\n inaccessible transfer port"+"\n-----\n");
+
+
+
+
+               // System.exit(1);
+                //break;
 
             }
 
 
 
         }
+
+
+
+
+
     }
+
+    public void disconnect(){
+
+
+
+
+            interfaceController.ConnectButton.setText("Connect");
+            interfaceController.connected= closeConnection();
+
+        interfaceController.workPane.setDisable(true);
+    }
+
 
 
 

@@ -3,7 +3,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
@@ -14,16 +13,18 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class InterfaceController {
     //fxml
 
+
+
     public TextField transferPortField;
     public TextField portField;
     public TextField ipField;
+
+
     public ChoiceBox commandChoiceBox;
     public TextArea logArea;
     public TableView tableFiles;
@@ -60,7 +61,7 @@ public class InterfaceController {
     public Pane dirPane;
     public Text filePathField;
 
-
+    //заместо конструктора
     public void Init(Stage primaryStage) {
 
         modes.put(0,"GET");
@@ -79,43 +80,8 @@ public class InterfaceController {
         commandChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                System.out.println("old Value:"+oldValue+" new:"+newValue);
 
-                selectedMode=modes.get(newValue);
-
-                switch (selectedMode){
-
-                    case "GET":{
-
-                        dirPane.setVisible(true);
-
-                        filePane.setVisible(false);
-
-                    };break;
-                    case "DELETE":{
-
-                        dirPane.setVisible(false);
-
-                        filePane.setVisible(false);
-
-                    };break;
-                    case "SEND":{
-
-                        dirPane.setVisible(false);
-
-                        filePane.setVisible(true);
-
-                    };break;
-                    case "LIST":{
-
-                        dirPane.setVisible(true);
-
-                        filePane.setVisible(false);
-
-                    };break;
-                }
-
-
+                changeMethod( newValue);
 
             }
         });
@@ -125,7 +91,8 @@ public class InterfaceController {
 
 
         tableFiles.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
+            //можно проверку и получше написать
+            if (newSelection != null&&!selectedMode.equals("LIST")) {
 
 
                 fileName =((FileName)newSelection).getName();
@@ -150,6 +117,78 @@ public class InterfaceController {
 
 
     }
+
+
+    public void clearFilesFields(){
+
+        fileField.setText("");
+        directoryField.setText("");
+
+        filePathField.setText("");
+
+
+        selectedDirectory=null;
+        selectedFile=null;
+
+
+        fileName="";
+
+    }
+
+
+    public  void changeMethod(Number newValue){
+
+
+        clearFilesFields();
+
+
+
+        selectedMode=modes.get(newValue);
+
+        switch (selectedMode){
+
+            case "GET":{
+
+                fileField.setText(fileName);
+
+                dirPane.setVisible(true);
+
+                filePane.setVisible(false);
+
+            };break;
+            case "DELETE":{
+
+                fileField.setText(fileName);
+
+                dirPane.setVisible(false);
+
+                filePane.setVisible(false);
+
+            };break;
+            case "SEND":{
+
+                dirPane.setVisible(false);
+
+                filePane.setVisible(true);
+
+            };break;
+            case "LIST":{
+
+
+                fileField.setText("list.txt");
+
+                dirPane.setVisible(true);
+
+                filePane.setVisible(false);
+
+            };break;
+        }
+
+
+    }
+
+
+
     public void process(ActionEvent actionEvent) {
 
 
@@ -245,7 +284,9 @@ public class InterfaceController {
 
 
 
-
+    public int getTransferPort() {
+        return Integer.parseInt(transferPortField.getText());
+    }
 
 
 
@@ -260,6 +301,9 @@ public class InterfaceController {
 
 
     public void setFilesList(List<FileName> filesList){
+
+
+        tableFiles.getItems().clear();
 
         filesList.forEach(fileName->{
 
@@ -280,9 +324,14 @@ public class InterfaceController {
         try {
 
             //подключаемся к серверу
-            socket.connect(new InetSocketAddress(ipField.getText(), Integer.parseInt(portField.getText())),2000);
 
-             client = new Client(socket,this);
+            //192.168.100.15
+            socket.connect(new InetSocketAddress(ipField.getText(), Integer.parseInt(portField.getText())),2000);
+            //Для тестов
+           // socket.connect(new InetSocketAddress("127.0.0.1", Integer.parseInt(portField.getText())),2000);
+
+
+            client = new Client(socket,this);
 
 
 
@@ -296,6 +345,19 @@ public class InterfaceController {
         }
     }
 
+    public void disconnect(){
+
+
+        tableFiles.getItems().clear();
+
+        ConnectButton.setText("Connect");
+        connected= client.closeConnection();
+
+        workPane.setDisable(true);
+
+
+    }
+
 
 
 
@@ -306,15 +368,25 @@ public class InterfaceController {
 
         if (!connected){
             connected=connect();
+            if(connected){
             ConnectButton.setText("Disconnect");
             workPane.setDisable(false);
+            }
+            else {
+                logInLoger("\n-----\n"+"connection error:\n\tconnect timed out"+"\n-----\n");
+            }
         }
         else {
+
+
             if(client!=null){
-                connected= client.closeConnection();
-            ConnectButton.setText("Connect");
+
+                disconnect();
+
             }
-            workPane.setDisable(true);
+
+
+
         }
 
     }

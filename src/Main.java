@@ -38,7 +38,7 @@ public class Main extends Application {
         //Задаем окну сцену с панелью, которая будет отображена
         primaryStage.setScene(scene);
         //задаем окну заголовок(необязательно)
-        primaryStage.setTitle("Авторизация");
+        primaryStage.setTitle("Client");
         //Отображение окна
         primaryStage.show();
 
