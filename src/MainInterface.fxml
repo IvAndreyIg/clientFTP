@@ -40,6 +40,7 @@
                             <String fx:value="DELETE" />
                             <String fx:value="SEND" />
                             <String fx:value="LIST" />
+<!--                            <String fx:value="TEST" />-->
                         </FXCollections>
                     </items>
                 </ChoiceBox>

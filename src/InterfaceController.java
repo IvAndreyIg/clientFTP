@@ -68,6 +68,7 @@ public class InterfaceController {
         modes.put(1,"DELETE");
         modes.put(2,"SEND");
         modes.put(3,"LIST");
+        modes.put(4,"TEST");
 
         dirPane.setVisible(true);
 
@@ -257,6 +258,15 @@ public class InterfaceController {
                 }else {
                     logInLoger("\n------\n directory not selected \n------");
 
+                }
+
+            };break;
+            case "TEST":{
+
+                try {
+                    client.sendCommandObject(selectedMode,"","");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
             };break;
