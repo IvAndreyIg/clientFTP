@@ -221,6 +221,7 @@ public class Client implements Runnable {
                 if(code.contains("150"))
                 {
 
+
                     transferSocket=new Socket();
                     transferSocket.connect(new InetSocketAddress(interfaceController.getTransferAddress(),interfaceController.getTransferPort()),2000);
                     DataInputStream in = new DataInputStream(transferSocket.getInputStream());
