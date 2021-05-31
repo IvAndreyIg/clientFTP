@@ -158,7 +158,7 @@ public class Client implements Runnable {
                 {
 
                     transferSocket=new Socket();
-                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferPort()),2000);
+                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferAddress(),interfaceController.getTransferPort()),10000);
                     DataInputStream in = new DataInputStream(transferSocket.getInputStream());
                     // DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
 
@@ -222,7 +222,7 @@ public class Client implements Runnable {
                 {
 
                     transferSocket=new Socket();
-                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferPort()),2000);
+                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferAddress(),interfaceController.getTransferPort()),2000);
                     DataInputStream in = new DataInputStream(transferSocket.getInputStream());
                    // DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
 
@@ -251,7 +251,7 @@ public class Client implements Runnable {
                 if(code.contains("151")){
                     transferSocket=new Socket();
 
-                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferPort()),2000);
+                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferAddress(),interfaceController.getTransferPort()),2000);
                    // DataInputStream in = new DataInputStream(transferSocket.getInputStream());
                     DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
 
@@ -300,12 +300,12 @@ public class Client implements Runnable {
     public void disconnect(){
 
 
-
-
-            interfaceController.ConnectButton.setText("Connect");
-            interfaceController.connected= closeConnection();
+        interfaceController.connected= closeConnection();
 
         interfaceController.workPane.setDisable(true);
+
+            interfaceController.ConnectButton.setText("Connect");
+
     }
 
 

@@ -297,6 +297,9 @@ public class InterfaceController {
     public int getTransferPort() {
         return Integer.parseInt(transferPortField.getText());
     }
+    public String getTransferAddress() {
+        return ipField.getText();
+    }
 
 
 
