@@ -1,5 +1,3 @@
-import javafx.scene.control.TextArea;
-
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -73,52 +71,6 @@ public class Client implements Runnable {
 
 
 
-    public static void main(String[] args)  {
-//        Socket socket = new Socket();
-//        try {
-//
-//            //подключаемся к серверу
-//            socket.connect(new InetSocketAddress(serverIP,port),2000);
-//
-//            Client client = new Client(socket, new TextArea());
-//
-//
-//
-//            new Thread(client).start();
-//
-//
-//            Scanner in = new Scanner(System.in);
-//
-//            //считываем команды из терминала
-//            while(client.inConnection){
-//
-//                try {
-//                    Thread.sleep(200);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                System.out.print("Input command: ");
-//                String data = in.nextLine();
-//
-//                String command=Tools.firstSplit(data);
-//
-//                String filePath=Tools.secondSplit(data);
-//
-//
-//                //отправляем команду
-//                client.sendCommandObject(command,filePath,"");
-//            }
-//
-//
-//
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
-    }
 
 
     @Override
@@ -196,7 +148,7 @@ public class Client implements Runnable {
 
 
 
-                    String[] strings = Tools.firstSplitEnter(stringBuilder.toString());
+                    String[] strings = Tools.splitByLine(stringBuilder.toString());
 
 
 

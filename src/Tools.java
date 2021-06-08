@@ -8,7 +8,7 @@ public class Tools {
    static final DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 
-    static String[]  firstSplitEnter(String command){
+    static String[] splitByLine(String command){
         String[] arg = command.split("\n");
         return arg;
     }
