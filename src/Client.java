@@ -103,11 +103,12 @@ public class Client implements Runnable {
                // System.out.println("\ncode:"+code+" path:"+path+" text:"+text);
 
 
-                interfaceController.logInLoger("\n---------------\n\tcode:"+code+"\n\ttext:\n"+text+"\n---------------");
+
 
                 //получаем лист
                 if(code.contains("149"))
                 {
+                    interfaceController.logInLogger("\n---------------\n\tcode:"+code+"\n\ttext:\n"+text+"\n---------------");
 
                     transferSocket=new Socket();
                     transferSocket.connect(new InetSocketAddress(interfaceController.getTransferAddress(),interfaceController.getTransferPort()),10000);
@@ -172,6 +173,7 @@ public class Client implements Runnable {
                 //получаем файл
                 if(code.contains("150"))
                 {
+                    interfaceController.logInLogger("\n---------------\n\tcode:"+code+"\n\ttext:\n"+text+"\n---------------");
 
 
                     transferSocket=new Socket();
@@ -224,13 +226,59 @@ public class Client implements Runnable {
 
                 }
 
+                if(code.contains("151")){
+
+                    interfaceController.logInLogger("\n---------------\n\tcode:"+code+"\n\ttext:\n"+text+"\n---------------");
+
+                    transferSocket=new Socket();
+
+                    transferSocket.connect(new InetSocketAddress(interfaceController.getTransferAddress(),interfaceController.getTransferPort()),2000);
+                    // DataInputStream in = new DataInputStream(transferSocket.getInputStream());
+                    DataOutputStream out=new DataOutputStream(transferSocket.getOutputStream());
+
+                    File f = new File(path);
+
+
+                    FileInputStream fin=new FileInputStream(f);
+
+                    byte[] buffer = new byte[1024];
+                    int count;
+                    while((count=fin.read(buffer)) > 0){
+                        //(data,start,len)
+                        out.write(buffer, 0, count);
+                    }
+                    fin.close();
+                    transferSocket.close();
+
+                }
+
+                if(code.contains("211")){
+
+                    if(text.equals("confirm")){
+
+                        interfaceController.confirmSignIn();
+
+                        interfaceController.logInLogger("\n---------------\n\tcode:"+code+"\n\tlogged in successfully\n---------------");
+
+
+                    }
+                    else if(text.equals("incorrect")){
+
+                        interfaceController.unConfirmSignIn();
+
+                        interfaceController.logInLogger("\n---------------\n\tcode:"+code+"\n\tlogin or pass incorrect\n---------------");
+
+                    }
+
+                }
+
 
             } catch (IOException e) {
                 e.printStackTrace();
 
-                //interfaceController.logInLoger();
+              //  interfaceController.signIn();
 
-                interfaceController.logInLoger("\n-----\n"+"transfer error:\n\tconnect timed out\n inaccessible transfer port"+"\n-----\n");
+                interfaceController.logInLogger("\n-----\n"+"transfer error:\n\tconnect timed out\n inaccessible transfer port"+"\n-----\n");
 
 
 
@@ -253,16 +301,35 @@ public class Client implements Runnable {
     public void disconnect(){
 
 
-        interfaceController.connected= closeConnection();
-
-        interfaceController.workPane.setDisable(true);
-
-            interfaceController.ConnectButton.setText("Connect");
+        interfaceController.logout();
 
     }
 
 
 
+
+    public void sendAuthDataObject(String login,String password)  {
+
+
+
+
+        //Создаем тело сообщения
+        HashMap<String, Object> newMessage = new HashMap<>();
+        //Устанавливаем команду
+        newMessage.put("command","AUTH");
+        //Устанавливаем специальный текст
+        newMessage.put("login",login);
+        //Устанавливаем путь
+        newMessage.put("password",password);
+        //Отправляем сообщение серверу
+        try { dout.writeObject(newMessage);
+        } catch (IOException e) { e.printStackTrace();
+        }
+
+
+
+
+    }
 
 
     public void sendCommandObject(String command,String filePath,String text) throws IOException {

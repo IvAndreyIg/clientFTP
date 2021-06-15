@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -23,7 +24,8 @@ public class InterfaceController {
     public TextField transferPortField;
     public TextField portField;
     public TextField ipField;
-
+    public TextField loginField;
+    public PasswordField passField;
 
     public ChoiceBox commandChoiceBox;
     public TextArea logArea;
@@ -55,14 +57,19 @@ public class InterfaceController {
     public Button dirButton;
 
     public boolean connected=false;
-    public Button ConnectButton;
+
     public TableColumn<? extends Object, ? extends Object> columnName;
     public Pane filePane;
     public Pane dirPane;
     public Text filePathField;
+    public Button SignInButton;
+
 
     //заместо конструктора
     public void Init(Stage primaryStage) {
+
+
+        SignInButton.setFocusTraversable(true);
 
         modes.put(0,"GET");
         modes.put(1,"DELETE");
@@ -189,6 +196,17 @@ public class InterfaceController {
     }
 
 
+    public void sendAuthData(){
+
+
+
+
+
+
+
+    }
+
+
 
     public void process(ActionEvent actionEvent) {
 
@@ -208,7 +226,7 @@ public class InterfaceController {
                     }
 
                 }else {
-                    logInLoger("\n------\n directory not selected \n------");
+                    logInLogger("\n------\n directory not selected \n------");
 
                 }
 
@@ -224,7 +242,7 @@ public class InterfaceController {
                     }
 
                 }else {
-                    logInLoger("\n------\n file not selected \n------");
+                    logInLogger("\n------\n file not selected \n------");
 
                 }
 
@@ -240,7 +258,7 @@ public class InterfaceController {
                     }
 
                 }else {
-                    logInLoger("\n------\n path not selected \n------");
+                    logInLogger("\n------\n path not selected \n------");
 
                 }
 
@@ -256,7 +274,7 @@ public class InterfaceController {
                     }
 
                 }else {
-                    logInLoger("\n------\n directory not selected \n------");
+                    logInLogger("\n------\n directory not selected \n------");
 
                 }
 
@@ -280,7 +298,7 @@ public class InterfaceController {
     }
 
 
-    public void logInLoger(String data){
+    public void logInLogger(String data){
 
 
 
@@ -358,17 +376,74 @@ public class InterfaceController {
         }
     }
 
-    public void disconnect(){
+
+    //public TextField loginField;
+    //    public PasswordField passField;
+
+    public void signIn() {
+
+        client.sendAuthDataObject(loginField.getText(),passField.getText());
+
+
+    }
+
+    public void logout(){
+
+
 
 
         tableFiles.getItems().clear();
 
-        ConnectButton.setText("Connect");
+        //ConnectButton.setText("Connect");
         connected= client.closeConnection();
 
         workPane.setDisable(true);
 
+        Platform.runLater(() -> {
 
+            SignInButton.setDisable(false);
+            SignInButton.setText("Sign in");
+        });
+
+
+    }
+
+
+    public void unConfirmSignIn() {
+
+
+        workPane.setDisable(true);
+
+
+        Platform.runLater(() -> {
+
+
+            SignInButton.setDisable(false);
+            SignInButton.setText("Sign in");
+
+
+
+        });
+    }
+
+    public void confirmSignIn(){
+
+
+        System.out.println("YES");
+
+
+        workPane.setDisable(false);
+
+
+        Platform.runLater(() -> {
+
+
+            SignInButton.setDisable(false);
+                SignInButton.setText("Logout");
+
+
+
+        });
     }
 
 
@@ -377,16 +452,41 @@ public class InterfaceController {
 
 
 
-    public void connectButClick(ActionEvent actionEvent) {
+
+    public void signInButClick(ActionEvent actionEvent) {
+
+        SignInButton.setDisable(true);
+        SignInButton.setText("Connection...");
 
         if (!connected){
+
+
+
+//            Platform.runLater(() -> {
+//
+//
+//            });
             connected=connect();
             if(connected){
-            ConnectButton.setText("Disconnect");
-            workPane.setDisable(false);
+
+
+
+
+
+
+                //
+
+                //
+                signIn();
             }
             else {
-                logInLoger("\n-----\n"+"connection error:\n\tconnect timed out"+"\n-----\n");
+                logInLogger("\n-----\n"+"connection error:\n\tconnect timed out"+"\n-----\n");
+
+                Platform.runLater(() -> {
+
+                    SignInButton.setDisable(false);
+                    SignInButton.setText("Sign in");
+                });
             }
         }
         else {
@@ -394,7 +494,8 @@ public class InterfaceController {
 
             if(client!=null){
 
-                disconnect();
+                logInLogger("\n-----\n"+"\tlogouted by click\n-----\n");
+                logout();
 
             }
 
@@ -439,4 +540,7 @@ public class InterfaceController {
 
         logArea.clear();
     }
+
+
+
 }
