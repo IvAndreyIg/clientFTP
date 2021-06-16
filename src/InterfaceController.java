@@ -382,7 +382,33 @@ public class InterfaceController {
 
     public void signIn() {
 
-        client.sendAuthDataObject(loginField.getText(),passField.getText());
+
+
+
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public void run(){
+
+                client.stepCkeck=1;
+
+                client.sendAuthDataObject(loginField.getText(),passField.getText());
+                System.out.println("Task #1 is running");
+
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(client.stepCkeck==1){
+                    signIn();
+                }
+            }
+        });
+
+        thread1.start();
+
+
+
 
 
     }
@@ -477,6 +503,12 @@ public class InterfaceController {
                 //
 
                 //
+
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 signIn();
             }
             else {

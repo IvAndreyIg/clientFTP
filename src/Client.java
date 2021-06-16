@@ -19,6 +19,9 @@ public class Client implements Runnable {
 
 
 
+    int stepCkeck=0;
+
+
 
     boolean requestInProcessing=true;
 
@@ -34,7 +37,7 @@ public class Client implements Runnable {
 
 
     public boolean closeConnection(){
-
+        stepCkeck=0;
         try {
             this.mainSocket.close();
             inConnection=false;
@@ -43,12 +46,15 @@ public class Client implements Runnable {
             e.printStackTrace();
             return true;
         }
+
     }
 
 
 
 
     public Client(Socket socket, InterfaceController interfaceController) {
+
+        stepCkeck=0;
         this.mainSocket = socket;
         this.interfaceController = interfaceController;
 
@@ -254,6 +260,8 @@ public class Client implements Runnable {
 
                 if(code.contains("211")){
 
+                    stepCkeck=0;
+
                     if(text.equals("confirm")){
 
                         interfaceController.confirmSignIn();
@@ -325,6 +333,8 @@ public class Client implements Runnable {
         try { dout.writeObject(newMessage);
         } catch (IOException e) { e.printStackTrace();
         }
+
+
 
 
 
