@@ -453,7 +453,7 @@ public class InterfaceController {
 
 
 
-    public void signInButClick(ActionEvent actionEvent) {
+    public void signInButClick(ActionEvent actionEvent) throws InterruptedException {
 
         SignInButton.setDisable(true);
         SignInButton.setText("Connection...");
@@ -477,6 +477,7 @@ public class InterfaceController {
                 //
 
                 //
+                Thread.sleep(50);
                 signIn();
             }
             else {
