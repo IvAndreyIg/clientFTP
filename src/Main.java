@@ -18,7 +18,7 @@ public class Main extends Application {
         FXMLLoader loader=new FXMLLoader();
 
         //устанавливаем загрузчику путь к документу и класс контроллер
-        loader.setLocation(InterfaceController.class.getResource("MainInterface.fxml"));
+        loader.setLocation(InterfaceController.class.getResource("interface/MainInterface.fxml"));
         //Загружаем документ с интерфейсом
         Pane rootLayout = (Pane) loader.load();
         //Получаем контроллер интерфейса
