@@ -389,19 +389,29 @@ public class InterfaceController {
             @Override
             public void run(){
 
+                int i=0;
                 client.stepCkeck=1;
+                while (client.stepCkeck==1){
+                    i++;
 
-                client.sendAuthDataObject(loginField.getText(),passField.getText());
-                System.out.println("Task #1 is running");
 
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    client.sendAuthDataObject(loginField.getText(),passField.getText());
+                    System.out.println("Task #"+i+" is running");
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
-                if(client.stepCkeck==1){
-                    signIn();
-                }
+
+
+
+
+
+
+
             }
         });
 

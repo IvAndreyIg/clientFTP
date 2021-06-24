@@ -17,9 +17,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="545.0" prefWidth="819.0" stylesheets="interface/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfaceController">
+<AnchorPane prefHeight="545.0" prefWidth="819.0" styleClass="anchor" stylesheets="interface/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfaceController">
     <children>
-      <Pane fx:id="connectionPane" layoutX="7.0" prefHeight="102.0" prefWidth="810.0">
+      <Pane fx:id="connectionPane" layoutX="7.0" prefHeight="102.0" prefWidth="810.0" styleClass="pane">
          <children>
 
             <Button fx:id="SignInButton" contentDisplay="RIGHT" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#signInButClick" prefHeight="28.0" prefWidth="203.0" styleClass="lion" text="Sign in">
@@ -33,23 +33,23 @@
                 </graphic>
             </Button>
 
-            <TextField styleClass="fieldsLion" fx:id="ipField" focusTraversable="false" layoutX="68.0" layoutY="51.0" promptText="127.0.0.1" text="127.0.0.1" />
-            <TextField fx:id="portField" focusTraversable="false" layoutX="263.0" layoutY="14.0" prefHeight="25.0" prefWidth="190.0" promptText="5217" text="5217" />
-            <TextField fx:id="transferPortField" focusTraversable="false" layoutX="304.0" layoutY="51.0" promptText="5218" text="5218" />
+            <TextField fx:id="ipField" focusTraversable="false" layoutX="68.0" layoutY="51.0" promptText="127.0.0.1" styleClass="fieldsLion" text="127.0.0.1" />
+            <TextField fx:id="portField" focusTraversable="false" layoutX="263.0" layoutY="14.0" prefHeight="25.0" prefWidth="190.0" promptText="5217" styleClass="fieldsLion" text="5217" />
+            <TextField fx:id="transferPortField" focusTraversable="false" layoutX="304.0" layoutY="51.0" promptText="5218" styleClass="fieldsLion" text="5218" />
 
             <Label layoutX="229.0" layoutY="18.0" text="port:" />
             <Label layoutX="14.0" layoutY="55.0" prefHeight="17.0" prefWidth="54.0" text="address:" />
             <Label layoutX="229.0" layoutY="55.0" text="transfer port:" />
-            <TextField fx:id="loginField" focusTraversable="false" layoutX="514.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="5217" text="user" />
+            <TextField fx:id="loginField" focusTraversable="false" layoutX="514.0" layoutY="14.0" prefHeight="25.0" prefWidth="180.0" promptText="5217" styleClass="fieldsLion" text="user" />
             <Label layoutX="479.0" layoutY="17.0" text="login:" />
             <Label layoutX="479.0" layoutY="55.0" text="password:" />
-            <PasswordField fx:id="passField" focusTraversable="false" layoutX="545.0" layoutY="51.0" text="1234" />
+            <PasswordField fx:id="passField" focusTraversable="false" layoutX="545.0" layoutY="51.0" styleClass="fieldsLion" text="1234" />
 
          </children>
       </Pane>
           <!--<Label layoutX="21.0" layoutY="35.0" text="OnLine" />-->
           <Label layoutX="547.0" layoutY="107.0" text="LOG" />
-        <Pane fx:id="workPane" layoutX="7.0" layoutY="107.0" prefHeight="424.0" prefWidth="536.0">
+        <Pane fx:id="workPane" layoutX="7.0" layoutY="107.0" prefHeight="424.0" prefWidth="536.0" styleClass="pane">
 
             <children>
 
@@ -63,10 +63,10 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                
-                <TableView fx:id="tableFiles" layoutX="14.0" layoutY="14.0" prefHeight="266.0" prefWidth="386.0">
+
+                <TableView fx:id="tableFiles" layoutX="14.0" layoutY="14.0" prefHeight="266.0" prefWidth="386.0" styleClass="tabView">
                     <columns>
-                        <TableColumn fx:id="columnName" minWidth="380.0" prefWidth="350.0" text="Files" />
+                        <TableColumn fx:id="columnName" minWidth="390.0" prefWidth="350.0" styleClass="column" text="Files" />
                     </columns>
                 </TableView>
             <Button fx:id="refreshButton" contentDisplay="RIGHT" layoutX="14.0" layoutY="287.0" mnemonicParsing="false" onAction="#refreshFilesList" prefHeight="25.0" prefWidth="180.0" styleClass="lion" text="Refresh">
@@ -91,14 +91,12 @@
                         </FXCollections>
                     </items>
                 </ChoiceBox>
-            <Pane fx:id="dirPane" layoutX="150.0" layoutY="330.0" prefHeight="91.0" prefWidth="377.0" style="-fx-background-color: gray;">
+            <Pane fx:id="dirPane" layoutX="150.0" layoutY="322.0" prefHeight="91.0" prefWidth="377.0" style="-fx-background-color: white;" styleClass="pane">
                <children>
-                  <Pane layoutX="6.0" layoutY="52.0" prefHeight="33.0" prefWidth="360.0" style="-fx-background-color: rgb(150,150,150);">
+                  <Pane layoutX="6.0" layoutY="52.0" prefHeight="33.0" prefWidth="360.0" style="-fx-background-color: white">
                      <children>
                         <Text fx:id="fileField" layoutX="10.0" layoutY="22.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="file name" wrappingWidth="235.5078163444996">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
+
                         </Text>
                      </children>
                   </Pane>
@@ -119,29 +117,27 @@
                   </Text>
                </children></Pane>
             <Label layoutX="623.0" layoutY="375.0" prefHeight="25.0" prefWidth="114.0" text="Label" visible="false" />
-            <Pane fx:id="filePane" layoutX="150.0" layoutY="330.0" prefHeight="91.0" prefWidth="360.0" style="-fx-background-color: gray;" visible="false">
-               <children>
-                  <Button contentDisplay="RIGHT" fx:id="fileButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#choiceFile" prefHeight="25.0" prefWidth="127.0" styleClass="lion" text="Choice file path" >
+                <Pane fx:id="filePane" layoutX="150.0" layoutY="322.0" prefHeight="91.0" prefWidth="377.0" style="-fx-background-color: white;" styleClass="pane" visible="false">
+                   <children>
+                      <Button fx:id="fileButton" contentDisplay="RIGHT" layoutX="5.0" layoutY="14.0" mnemonicParsing="false" onAction="#choiceFile" prefHeight="28.0" prefWidth="180.0" styleClass="lion" text="Choice file path">
 
-                      <graphic>
-                          <ImageView fitHeight="22.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                  <Image url="interface/images/file.png" />
-                              </image>
-                          </ImageView>
-                      </graphic>
-                  </Button>
-                  <Text fx:id="filePathField" layoutX="160.0" layoutY="32.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="179.99998927116394">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </Text>
-               </children>
-            </Pane>
+                          <graphic>
+                              <ImageView fitHeight="22.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="interface/images/file.png" />
+                                  </image>
+                              </ImageView>
+                          </graphic>
+                      </Button>
+                      <Text fx:id="filePathField" layoutX="190.0" layoutY="32.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="190.0">
+
+                      </Text>
+                   </children>
+                </Pane>
             </children>
         </Pane>
 
-          <TextArea fx:id="logArea" layoutX="547.0" layoutY="132.0" prefHeight="281.0" prefWidth="253.0" scrollLeft="300.0" scrollTop="200.0">
+          <TextArea fx:id="logArea" layoutX="547.0" layoutY="132.0" prefHeight="281.0" prefWidth="253.0" scrollLeft="300.0" scrollTop="200.0" styleClass="logger">
                 </TextArea>
       <Button fx:id="ClearLoggerBut" contentDisplay="RIGHT" layoutX="551.0" layoutY="428.0" mnemonicParsing="false" onAction="#clearLoggerButClick" prefHeight="27.0" prefWidth="246.0" styleClass="lion" text="Clear">
 

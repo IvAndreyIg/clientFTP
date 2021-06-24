@@ -1,8 +1,14 @@
 .lion {
+
+-fx-background-radius: 5px;
+
+        -fx-border-radius: 5px;
+        -fx-border-width: 1px;
+        -fx-border-color: black;
+
     -fx-background-color:
-        rgba(0,0,0,0.08),
-        linear-gradient(#5a61af, #51536d),
-        linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, #88c6fb 51%, #d5faff 100%);
+
+        linear-gradient(rgba(228, 251, 255,1) 0%,rgba(206, 230, 251,0.8) 10%, rgba(215, 141, 231,0.8)  50%, rgba(216, 148, 231,1)  51%, rgba(213, 250, 255,1)  100%);
     -fx-background-insets: 0 0 -1 0,0,1;
     -fx-background-radius: 5,5,4;
     -fx-padding: 2 4 2 10;
@@ -11,33 +17,91 @@
 }
 
 .lion:hover {
+
     -fx-background-color:
-        rgba(0,0,0,0.11),
-        linear-gradient(#5a61af, #51536d),
-        linear-gradient(#e4fbff 0%,#3ee6fb 10%, #a5d3fb 50%, #88c6fb 51%, #d5fab4 100%);
+
+        linear-gradient(rgba(228, 251, 255,1) 0%,rgba(206, 230, 251,0.8) 10%,rgba(215, 141, 231,0.8)  50%, rgba(216, 148, 231,1)    51%, rgba(213, 250, 180,1) 100%);
     -fx-background-insets: 0 0 -1 0,0,1;
     -fx-background-radius: 5,5,4;
+
+
 
 }
 
+.lion:pressed {
+  -fx-effect: dropshadow(gaussian , rgba(100,20,100,0.4), 5, 0, 1, 1);
+
+}
+
+
 .fieldsLion {
-    -fx-background-color:
-        rgba(0,0,0,0.02),
-        linear-gradient(#5a61af, #51536d)
-        ;
-    -fx-background-insets: 0 0 -1 0,0,1;
-    -fx-background-radius: 5,5,4;
-    -fx-text-fill: #242d35;
-    -fx-font-size: 12px;
+
+
+
+
+           -fx-border-color: rgba(0, 0, 0,1);
+
+         -fx-background-color: white ;
+                -fx-background-insets: 0 0 0 0, 0 0 0 0, 0 0 0 0;
+
+
+
+    -fx-border-width: 0 0 1 0;
+
 }
 
 .fieldsLion:hover {
-    -fx-background-color:
-        rgba(0,0,0,0.02),
-        linear-gradient(#5a61af, #51536d)
-        ;
-    -fx-background-insets: 0 0 -1 0,0,1;
-    -fx-background-radius: 5,5,4;
 
+
+}
+.fieldsLion:focused {
+
+
+-fx-effect: innershadow( gaussian, rgba(215, 141, 231,0.4), 15, 0, 0, 0 );
+}
+
+
+.garbage{
+ -fx-background-radius: 5px;
+
+        -fx-border-radius: 5px;
+        -fx-border-width: 1px;
+        -fx-border-color: black;
+
+-fx-effect: dropshadow(gaussian , rgba(100,20,200,0.4), -5, 0.9, 0, 0);
+}
+
+.pane{
+-fx-background-color: rgba(255,255,255,0);
+}
+.anchor{
+-fx-font-family: 'Quicksand Medium';
+-fx-background-color: rgba(255,255,255,1);
+}
+
+.column{
+
+
+}
+
+.tabView{
+
+}
+
+.tabView:focused {
+-fx-effect: dropshadow(gaussian ,  rgba(215, 141, 231,0.4), 10, 0.5, 0, 0);
+}
+
+
+.logger{
+
+}
+
+.fontS{
+-fx-font-family: 'Quicksand Medium';
+}
+
+.logger:focused {
+-fx-effect: dropshadow(gaussian ,  rgba(215, 141, 231,0.4), 10, 0.5, 0, 0);
 }
 
