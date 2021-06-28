@@ -99,9 +99,10 @@ public class InterfaceController {
 
 
         tableFiles.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            //можно проверку и получше написать
+
             if (newSelection != null&&!selectedMode.equals("LIST")) {
 
+                System.out.println("start");
 
                 fileName =((FileName)newSelection).getName();
 
@@ -110,10 +111,16 @@ public class InterfaceController {
 
                 if(selectedDirectory!=null){
 
-                    directoryField.setText(selectedDirectory.getAbsolutePath()+"\\"+fileName);
+                    StringBuilder stringBuilder = new StringBuilder(selectedDirectory.getAbsolutePath());
+
+                    stringBuilder.append("\\");
+
+                    stringBuilder.append(fileName);
+                    directoryField.setText(stringBuilder.toString());
                 }
 
 
+                System.out.println("stop");
             }
         });
 
@@ -365,7 +372,7 @@ public class InterfaceController {
             client = new Client(socket,this);
 
 
-
+            //стартуем поток
             new Thread(client).start();
 
             return true;
@@ -498,38 +505,47 @@ public class InterfaceController {
 
 
 
-//            Platform.runLater(() -> {
-//
-//
-//            });
-            connected=connect();
-            if(connected){
+            Thread conThread = new Thread(new Runnable() {
+                @Override
+                public void run(){
+
+                    connected=connect();
+                    if(connected){
 
 
 
 
 
 
-                //
+                        //
 
-                //
+                        //
 
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        signIn();
+                    }
+                    else {
+                        logInLogger("\n-----\n"+"connection error:\n\tconnect timed out"+"\n-----\n");
+
+                        Platform.runLater(() -> {
+
+                            SignInButton.setDisable(false);
+                            SignInButton.setText("Sign in");
+                        });
+                    }
+
                 }
-                signIn();
-            }
-            else {
-                logInLogger("\n-----\n"+"connection error:\n\tconnect timed out"+"\n-----\n");
+            });
 
-                Platform.runLater(() -> {
+            conThread.start();
 
-                    SignInButton.setDisable(false);
-                    SignInButton.setText("Sign in");
-                });
-            }
+
+
+
         }
         else {
 

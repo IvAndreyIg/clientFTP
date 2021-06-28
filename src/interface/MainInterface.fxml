@@ -53,7 +53,7 @@
 
             <children>
 
-                <Button fx:id="Process" contentDisplay="RIGHT" layoutX="21.0" layoutY="375.0" mnemonicParsing="false" onAction="#process" prefHeight="33.0" prefWidth="114.0" styleClass="lion" text="Process">
+                <Button fx:id="Process" contentDisplay="RIGHT" layoutX="14.0" layoutY="377.0" mnemonicParsing="false" onAction="#process" prefHeight="33.0" prefWidth="114.0" styleClass="lion" text="Process">
 
                     <graphic>
                         <ImageView fitHeight="27.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
@@ -80,7 +80,7 @@
                 </graphic>
             </Button>
 
-                <ChoiceBox fx:id="commandChoiceBox" layoutX="21.0" layoutY="336.0" prefHeight="25.0" prefWidth="114.0" styleClass="lion" value="GET">
+                <ChoiceBox fx:id="commandChoiceBox" layoutX="14.0" layoutY="336.0" prefHeight="25.0" prefWidth="114.0" styleClass="lion" value="GET">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="GET" />
@@ -139,7 +139,7 @@
 
           <TextArea fx:id="logArea" layoutX="547.0" layoutY="132.0" prefHeight="281.0" prefWidth="253.0" scrollLeft="300.0" scrollTop="200.0" styleClass="logger">
                 </TextArea>
-      <Button fx:id="ClearLoggerBut" contentDisplay="RIGHT" layoutX="551.0" layoutY="428.0" mnemonicParsing="false" onAction="#clearLoggerButClick" prefHeight="27.0" prefWidth="246.0" styleClass="lion" text="Clear">
+      <Button fx:id="ClearLoggerBut" contentDisplay="RIGHT" layoutX="547.0" layoutY="429.0" mnemonicParsing="false" onAction="#clearLoggerButClick" prefHeight="27.0" prefWidth="253.0" styleClass="lion" text="Clear">
 
           <graphic>
               <ImageView fitHeight="21.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">

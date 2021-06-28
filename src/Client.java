@@ -51,7 +51,7 @@ public class Client implements Runnable {
 
 
 
-
+    //каждое подключение крутится в отдельном потоке, для этого этот класс runnable, будет хранить все данные
     public Client(Socket socket, InterfaceController interfaceController) {
 
         stepCkeck=0;

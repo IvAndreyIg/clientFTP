@@ -75,30 +75,20 @@
 -fx-background-color: rgba(255,255,255,0);
 }
 .anchor{
--fx-font-family: 'Quicksand Medium';
+-fx-font-family: 'Segoe UI Semibold';
 -fx-background-color: rgba(255,255,255,1);
 }
 
-.column{
 
-
-}
-
-.tabView{
-
-}
 
 .tabView:focused {
 -fx-effect: dropshadow(gaussian ,  rgba(215, 141, 231,0.4), 10, 0.5, 0, 0);
 }
 
 
-.logger{
-
-}
 
 .fontS{
--fx-font-family: 'Quicksand Medium';
+-fx-font-family: 'Segoe UI Semibold';
 }
 
 .logger:focused {
